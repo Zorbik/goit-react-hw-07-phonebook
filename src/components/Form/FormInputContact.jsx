@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Label, Button } from '../../components';
-import { addContact } from '../../redux/contactsSlice';
 import { getContacts } from '../../redux/selectors';
+import { addContact } from '../../services/phoneBookAPI';
 
 export const FormInputContact = () => {
   const [name, setName] = useState('');
@@ -31,7 +30,7 @@ export const FormInputContact = () => {
     ) {
       alert(`${name} is alredy in contacts!`);
     } else {
-      dispatch(addContact({ id: nanoid(), name, number }));
+      dispatch(addContact({ name, number }));
       reset();
     }
   };
