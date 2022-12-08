@@ -15,7 +15,6 @@ import { fetchContacts } from './services/phoneBookAPI';
 function App() {
   const stateContacts = useSelector(getContacts);
   const dispatch = useDispatch();
-  console.log('stateContacts', stateContacts);
 
   useEffect(() => {
     dispatch(fetchContacts());

@@ -23,7 +23,6 @@ export const deleteContact = createAsyncThunk(
     try {
       const response = await axios.delete(`${API}${id}`);
       dispatch(delContact(id));
-      console.log('response', response.data);
 
       toast.success(`Контакт ${response.data.name} успішно видален!`);
 
