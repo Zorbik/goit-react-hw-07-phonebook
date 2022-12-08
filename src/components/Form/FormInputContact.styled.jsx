@@ -29,6 +29,8 @@ export const Label = styled.label`
 `;
 
 export const Button = styled.button`
+  display: flex;
+  justify-content: space-between;
   box-shadow: ${p => p.theme.shadows.normal};
   border: ${p => p.theme.borders.normal} ${p => p.theme.colors.blue};
   border-radius: ${p => p.theme.radii.normal};

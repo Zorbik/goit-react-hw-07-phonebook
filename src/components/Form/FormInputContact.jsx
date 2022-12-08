@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Label, Button } from '../../components';
 import { getContacts } from '../../redux/selectors';
-import { addContact } from '../../services/phoneBookAPI';
+import { addContact } from '../../redux/phoneBookOperations';
 
 export const FormInputContact = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const dispatch = useDispatch();
   const stateContacts = useSelector(getContacts);
+  let isLoading = false;
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -22,15 +23,17 @@ export const FormInputContact = () => {
 
   const onFormSubmit = e => {
     e.preventDefault();
-
+    isLoading = true;
     if (
       stateContacts?.find(
         contact => contact.name.toLowerCase() === name.toLowerCase()
       )
     ) {
+      isLoading = false;
       alert(`${name} is alredy in contacts!`);
     } else {
       dispatch(addContact({ name, number }));
+
       reset();
     }
   };
@@ -59,7 +62,9 @@ export const FormInputContact = () => {
           required
         />
       </Label>
-      <Button type="submit">Add contact</Button>
+      <Button type="submit">
+        {isLoading ? 'Adding contact' : 'Add contact'}
+      </Button>
     </Form>
   );
 };

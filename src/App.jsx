@@ -10,7 +10,7 @@ import {
   Filter,
 } from './components';
 import { getContacts } from './redux/selectors';
-import { fetchContacts } from './services/phoneBookAPI';
+import { fetchContacts } from './redux/phoneBookOperations';
 
 function App() {
   const stateContacts = useSelector(getContacts);

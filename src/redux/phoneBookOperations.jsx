@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { delContact, addNewContact } from '../redux/phoneBookSlice';
 
 const API = 'https://6390aea30bf398c73a8f8a75.mockapi.io/api/contacts/';
 
@@ -10,6 +9,7 @@ export const fetchContacts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios(API);
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -22,7 +22,6 @@ export const deleteContact = createAsyncThunk(
   async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.delete(`${API}${id}`);
-      dispatch(delContact(id));
 
       toast.success(`Контакт ${response.data.name} успішно видален!`);
 
@@ -45,8 +44,10 @@ export const addContact = createAsyncThunk(
           phone: number,
         },
       });
-      dispatch(addNewContact(response.data));
+
       toast.success(`Контакт ${response.data.name} успішно додан!`);
+
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }

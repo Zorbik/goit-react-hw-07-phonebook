@@ -3,7 +3,7 @@ import {
   addContact,
   deleteContact,
   fetchContacts,
-} from '../services/phoneBookAPI';
+} from './phoneBookOperations';
 
 const initialState = {
   contacts: {
@@ -14,68 +14,47 @@ const initialState = {
   filter: '',
 };
 
-const setError = (state, { payload }) => {
-  state.contacts = {
-    ...state.contacts,
-    isLoading: false,
-    error: payload,
-  };
-};
-
-const setPending = state => {
-  state.contacts = {
-    ...state.contacts,
-    isLoading: true,
-    error: null,
-  };
-};
+function isRejectedAction(action) {
+  return action.type.endsWith('rejected');
+}
+function isPendingAction(action) {
+  return action.type.endsWith('pending');
+}
 
 export const phoneBookSlice = createSlice({
   name: 'phoneBook',
   initialState,
   reducers: {
-    addNewContact(state, { payload }) {
-      const { items } = state.contacts;
-      state.contacts = {
-        ...state.contacts,
-        items: [...items, payload],
-      };
-    },
-
-    delContact(state, { payload }) {
-      state.contacts = {
-        items: state.contacts.items.filter(({ id }) => payload !== id),
-      };
-    },
-
     changeSearchQuery(state, { payload }) {
       state.filter = payload;
     },
   },
 
-  extraReducers: {
-    [fetchContacts.pending]: setPending,
-    [deleteContact.pending]: setPending,
-    [addContact.pending]: setPending,
-
-    [fetchContacts.fulfilled]: (state, { payload }) => {
-      state.contacts = {
-        ...state.contacts,
-        isLoading: false,
-        items: payload,
-      };
-    },
-    [addContact.fulfilled]: (state, _) => {
-      state.contacts = {
-        ...state.contacts,
-        isLoading: false,
-      };
-    },
-    [fetchContacts.rejected]: setError,
-    [deleteContact.rejected]: setError,
-    [addContact.rejected]: setError,
+  extraReducers: builder => {
+    builder
+      .addCase(fetchContacts.fulfilled, (state, { payload }) => {
+        state.contacts.items = payload;
+        state.contacts.isLoading = false;
+      })
+      .addCase(addContact.fulfilled, (state, { payload }) => {
+        state.contacts.items = [payload, ...state.contacts.items];
+        state.contacts.isLoading = false;
+      })
+      .addCase(deleteContact.fulfilled, (state, { payload }) => {
+        state.contacts.items = state.contacts.items.filter(
+          ({ id }) => payload !== id
+        );
+        state.contacts.isLoading = false;
+      })
+      .addMatcher(isPendingAction, (state, { payload }) => {
+        state.contacts.isLoading = true;
+        state.contacts.error = null;
+      })
+      .addMatcher(isRejectedAction, (state, { payload }) => {
+        state.contacts.isLoading = false;
+        state.contacts.error = payload;
+      });
   },
 });
 
-export const { addNewContact, delContact, changeSearchQuery } =
-  phoneBookSlice.actions;
+export const { changeSearchQuery } = phoneBookSlice.actions;
