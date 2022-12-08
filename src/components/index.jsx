@@ -10,4 +10,4 @@ export { Filter } from './Form/Filter';
 export { Contact } from './ContactsList/Contact';
 export { ContactsList } from './ContactsList/ContactsList';
 // loader
-export { loader } from './Loaders/Loader';
+export { Loader } from './Loaders/Loader';

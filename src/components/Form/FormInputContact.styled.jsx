@@ -44,4 +44,14 @@ export const Button = styled.button`
     color: ${p => p.theme.colors.blue};
   }
   transition: color 250ms linear, background-color 250ms linear;
+
+  &:disabled {
+    border-color: ${p => p.theme.colors.white};
+    background-color: ${p => p.theme.colors.white};
+    color: ${p => p.theme.colors.black};
+    :hover {
+      background-color: ${p => p.theme.colors.white};
+      color: ${p => p.theme.colors.black};
+    }
+  }
 `;

@@ -9,7 +9,6 @@ export const FormInputContact = () => {
   const [number, setNumber] = useState('');
   const dispatch = useDispatch();
   const stateContacts = useSelector(getContacts);
-  let isLoading = false;
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -23,13 +22,11 @@ export const FormInputContact = () => {
 
   const onFormSubmit = e => {
     e.preventDefault();
-    isLoading = true;
     if (
       stateContacts?.find(
         contact => contact.name.toLowerCase() === name.toLowerCase()
       )
     ) {
-      isLoading = false;
       alert(`${name} is alredy in contacts!`);
     } else {
       dispatch(addContact({ name, number }));
@@ -62,9 +59,7 @@ export const FormInputContact = () => {
           required
         />
       </Label>
-      <Button type="submit">
-        {isLoading ? 'Adding contact' : 'Add contact'}
-      </Button>
+      <Button type="submit">Add contact</Button>
     </Form>
   );
 };
